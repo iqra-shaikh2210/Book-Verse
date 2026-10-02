@@ -29,16 +29,15 @@ function ChatBot() {
       { sender: "user", text: userText, books: [] }
     ]);
     setLoading(true);
-
-    try {
-      // 2. Send request to backend chat route
-      const response = await fetch("http://localhost:5000/api/chat", {
+  // 2. Send request to backend chat route
+      try {
+      // 2. Send request to the matching backend chat route
+      const response = await fetch("https://book-verse-backend-7dpu.onrender.com/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userText })
       });
+
 
       const data = await response.json();
 
