@@ -32,7 +32,7 @@ function Books({ savedBooks, setSavedBooks }) {
 
   useEffect(() => {
 
-    fetch("http://localhost:5000/api/books")
+    fetch("https://book-verse-backend-7dpu.onrender.com/api/books")
 
       .then((response) => response.json())
 

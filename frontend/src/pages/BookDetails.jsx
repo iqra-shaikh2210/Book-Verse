@@ -13,7 +13,7 @@ function BookDetails() {
 
   useEffect(() => {
 
-    fetch(`http://localhost:5000/api/books/${id}`)
+    fetch(`https://book-verse-backend-7dpu.onrender.com/api/books/${id}`)
 
       .then((response) => {
 
