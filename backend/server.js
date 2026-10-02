@@ -3,6 +3,7 @@ const express=require("express");
 const mongoose=require("mongoose");
 const cors=require("cors");
 const bookRoutes= require("./routes/bookRoutes");
+const chatbotRoutes = require("./routes/chatbotRoutes");
 
 const app = express();
 
@@ -17,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI,{dbName:"BookVerse"})
     console.log("Mongodb connection error:",error);
 });
 app.use("/api/books",bookRoutes);
-
+app.use("/api/chat", chatbotRoutes);
 app.get("/",(req,res)=>{
     res.send("BookVerse backend is running");
 });

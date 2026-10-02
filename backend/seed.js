@@ -1,32 +1,24 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const Book = require("./models/Book");
-const books = require("./data/books.json");
+const booksData = require("./data/books.json");
 
-const seedBooks = async () => {
-  try {
-    // Connect to MongoDB
-    await mongoose.connect("mongodb://127.0.0.1:27017/bookverse");
+// Connect directly to your MongoDB database
+mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/bookverse");
 
-    console.log("MongoDB connected successfully");
+// Function to empty old books and insert the new books
+const seedDatabase = async () => {
+  // Step 1: Wipe all old records
+  await Book.deleteMany({});
+  console.log("Old books deleted from MongoDB");
 
-    // Remove old books
-    await Book.deleteMany({});
+  // Step 2: Insert your updated JSON file
+  await Book.insertMany(booksData);
+  console.log(`${booksData.length} books inserted successfully!`);
 
-    console.log("Old books deleted");
-
-    // Insert all books from books.json
-    await Book.insertMany(books);
-
-    console.log(`${books.length} books inserted successfully`);
-
-    // Close connection
-    await mongoose.connection.close();
-
-    console.log("MongoDB connection closed");
-  } catch (error) {
-    console.error("Error inserting books:", error);
-    process.exit(1);
-  }
+  // Step 3: Close the script automatically
+  process.exit();
 };
 
-seedBooks();
+// Run the function
+seedDatabase();
