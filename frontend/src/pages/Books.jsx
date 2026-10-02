@@ -287,28 +287,51 @@ function Books({ savedBooks, setSavedBooks }) {
             >
 
 
-              {/* BOOK IMAGE */}
-
-              <div className="book-image">
-                {/* BOOK IMAGE */}
-
-<div className="book-image">
+ {/* CLEAN SINGLE CONTAINER WITH EXPLICIT DIMENSIONS */}
+<div 
+  className="book-image" 
+  style={{ 
+    width: "100%", 
+    height: "280px", 
+    backgroundColor: "#F8F1ED", 
+    overflow: "hidden",
+    position: "relative" 
+  }}
+>
   {book.cover ? (
     <img
       src={book.cover}
       alt={book.title}
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        display: "block"
+      }}
       onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = `https://placehold.co/400x600/e8ddd2/5c4033.png?text=${encodeURIComponent(book.title)}`;
+        // Prevent infinite loops and show styled brand card
+        e.target.style.display = "none";
+        if (e.target.nextElementSibling) {
+          e.target.nextElementSibling.style.display = "flex";
+        }
       }}
     />
-  ) : (
-  <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>📖</span>
-
-  )}
+  ) : null}
+  <div
+    style={{
+      display: book.cover ? "none" : "flex",
+      width: "100%",
+      height: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "2.5rem",
+      backgroundColor: "#F8F1ED",
+      color: "#633C4F"
+    }}
+  >
+    📖
+  </div>
 </div>
-
-              </div>
 
 
               {/* BOOK INFORMATION */}

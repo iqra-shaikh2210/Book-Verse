@@ -72,18 +72,50 @@ function BookDetails() {
 
         {/* BOOK COVER */}
 
-        <div className="book-details-image">
-
-          {book.cover ? (
-            <img
-              src={book.cover}
-              alt={book.title}
-            />
-          ) : (
-            <span>📖</span>
-          )}
-
-        </div>
+ <div 
+  className="book-details-image" 
+  style={{ 
+    width: "280px", 
+    height: "420px", 
+    backgroundColor: "#F8F1ED", 
+    borderRadius: "12px", 
+    overflow: "hidden" 
+  }}
+>
+  {book?.cover ? (
+    <img
+      src={book.cover}
+      alt={book.title || "Book Cover"}
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        display: "block",
+        borderRadius: "12px"
+      }}
+      onError={(e) => {
+        e.target.style.display = "none";
+        if (e.target.nextElementSibling) {
+          e.target.nextElementSibling.style.display = "flex";
+        }
+      }}
+    />
+  ) : null}
+  <div
+    style={{
+      display: book?.cover ? "none" : "flex",
+      width: "100%",
+      height: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "3.5rem",
+      backgroundColor: "#F8F1ED",
+      color: "#633C4F"
+    }}
+  >
+    📖
+  </div>
+</div>
 
 
         {/* BOOK INFORMATION */}
@@ -103,7 +135,7 @@ function BookDetails() {
           </p>
 
           <p className="book-details-rating">
-            ★ {book.rating}
+            Rating: {book.rating}
           </p>
 
           <p className="book-details-year">

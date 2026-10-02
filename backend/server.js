@@ -22,7 +22,7 @@ app.use("/api/chat", chatbotRoutes);
 app.get("/",(req,res)=>{
     res.send("BookVerse backend is running");
 });
-const PORT=5000;
-app.listen(PORT,()=>{
+const PORT=process.env.PORT||5000;
+app.listen(PORT,"0.0.0.0",()=>{
     console.log(`Server is running on http://localhost:${PORT}`);
 });

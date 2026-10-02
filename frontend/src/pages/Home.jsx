@@ -46,7 +46,7 @@ function Home() {
       <section className="intro-section">
 
         <p className="small-heading">
-          YOUR NEXT STORY AWAITS ✨
+          YOUR NEXT STORY AWAITS 
         </p>
 
         <h1>
@@ -62,7 +62,7 @@ function Home() {
           className="ai-button"
           onClick={() => navigate("/Books")}
         >
-          ✨ Find My Next Book
+          Find My Next Book
         </button>
 
       </section>
@@ -71,7 +71,7 @@ function Home() {
       {/* GENRE SECTION */}
       <section className="genres">
 
-        <h2>Explore by Genre 🌷</h2>
+        <h2>Explore by Genre </h2>
 
         <div className="genre-container">
 
@@ -141,7 +141,7 @@ function Home() {
                 <h3>{book.title}</h3>
 
                 <p>
-                  ⭐ {book.rating}
+                  Rating : {book.rating}
                 </p>
 
               </div>
