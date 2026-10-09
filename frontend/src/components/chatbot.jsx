@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import "../styles/ChatBot.css";
 
-function ChatBot() {
+function ChatBot({ savedBooks = [], setSavedBooks = () => {} }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
@@ -14,7 +14,23 @@ function ChatBot() {
       books: []
     }
   ]);
-  
+
+  // Toggle saving full book object to match Saved.jsx
+  const handleToggleSave = (e, book) => {
+    e.stopPropagation(); // Prevents opening BookDetails
+
+    const isAlreadySaved = savedBooks.some((b) => b._id === book._id);
+    let updated;
+
+    if (isAlreadySaved) {
+      updated = savedBooks.filter((b) => b._id !== book._id);
+    } else {
+      updated = [...savedBooks, book];
+    }
+
+    setSavedBooks(updated);
+    localStorage.setItem("savedBooks", JSON.stringify(updated));
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -23,25 +39,21 @@ function ChatBot() {
     const userText = inputMessage.trim();
     setInputMessage("");
 
-    // 1. Append user message to message feed
     setMessages((prev) => [
       ...prev,
       { sender: "user", text: userText, books: [] }
     ]);
     setLoading(true);
-  // 2. Send request to backend chat route
-      try {
-      // 2. Send request to the matching backend chat route
+
+    try {
       const response = await fetch("https://book-verse-backend-7dpu.onrender.com/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userText })
       });
 
-
       const data = await response.json();
 
-      // 3. Append bot reply and matched books
       setMessages((prev) => [
         ...prev,
         {
@@ -67,7 +79,6 @@ function ChatBot() {
 
   return (
     <div className="chatbot-wrapper">
-      {/* Floating Trigger Button */}
       <button
         className="chatbot-toggle-btn"
         onClick={() => setIsOpen(!isOpen)}
@@ -76,10 +87,8 @@ function ChatBot() {
         {isOpen ? "✕" : "Ask VerseAi✨"}
       </button>
 
-      {/* Floating macOS Chat Window */}
       {isOpen && (
         <div className="chatbot-window">
-          {/* Header */}
           <div className="chatbot-header">
             <div className="chatbot-header-titles">
               <h3>Verse AI✨</h3>
@@ -90,52 +99,63 @@ function ChatBot() {
             </button>
           </div>
 
-          {/* Messages Area */}
           <div className="chatbot-messages">
             {messages.map((msg, index) => (
               <div key={index} className={`chat-bubble-row ${msg.sender}`}>
                 <div className={`chat-bubble ${msg.sender}`}>
                   <p>{msg.text}</p>
-                  {/* Quick Starter Suggestion Chips */}{messages.length === 1 && (
-  <div className="chatbot-quick-chips">
-    <button type="button" onClick={() => setInputMessage("Cozy slow-burn romance")}>
-       Cozy Romance
-    </button>
-    <button type="button" onClick={() => setInputMessage("Dark psychological thriller")}>
-      Dark Thriller
-    </button>
-    <button type="button" onClick={() => setInputMessage("Magical fantasy quest")}>
-    Epic Fantasy
-    </button>
-  </div>
-)}
+                  {messages.length === 1 && (
+                    <div className="chatbot-quick-chips">
+                      <button type="button" onClick={() => setInputMessage("Cozy slow-burn romance")}>
+                        Cozy Romance
+                      </button>
+                      <button type="button" onClick={() => setInputMessage("Dark psychological thriller")}>
+                        Dark Thriller
+                      </button>
+                      <button type="button" onClick={() => setInputMessage("Magical fantasy quest")}>
+                        Epic Fantasy
+                      </button>
+                    </div>
+                  )}
 
-                  {/* Render Book Cards inside Bot Response */}
                   {msg.books && msg.books.length > 0 && (
                     <div className="chatbot-books-grid">
-                      {msg.books.map((book) => (
-                        <div
-                          key={book._id}
-                          className="chatbot-book-card"
-                          onClick={() => {
-                            setIsOpen(false);
-                            navigate(`/BookDetails/${book._id}`);
-                          }}
-                        >
-                          <div className="chatbot-book-cover">
-                            {book.cover ? (
-                              <img src={book.cover} alt={book.title} />
-                            ) : (
-                              <span>📖</span>
-                            )}
+                      {msg.books.map((book) => {
+                        const isSaved = savedBooks.some((b) => b._id === book._id);
+
+                        return (
+                          <div
+                            key={book._id}
+                            className="chatbot-book-card"
+                            onClick={() => {
+                              setIsOpen(false);
+                              navigate(`/BookDetails/${book._id}`);
+                            }}
+                          >
+                            <div className="chatbot-book-cover">
+                              {book.cover ? (
+                                <img src={book.cover} alt={book.title} />
+                              ) : (
+                                <span>📖</span>
+                              )}
+                            </div>
+                            <div className="chatbot-book-details">
+                              <h4>{book.title}</h4>
+                              <p className="chatbot-book-author">{book.author}</p>
+                              <span className="chatbot-book-rating">★ {book.rating}</span>
+
+                              {/* Save to Saved Books Button */}
+                              <button
+                                type="button"
+                                className={`chatbot-save-btn ${isSaved ? "saved" : ""}`}
+                                onClick={(e) => handleToggleSave(e, book)}
+                              >
+                                {isSaved ? "✓ Saved" : "+ Save"}
+                              </button>
+                            </div>
                           </div>
-                          <div className="chatbot-book-details">
-                            <h4>{book.title}</h4>
-                            <p className="chatbot-book-author">{book.author}</p>
-                            <span className="chatbot-book-rating">★ {book.rating}</span>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -151,7 +171,6 @@ function ChatBot() {
             )}
           </div>
 
-          {/* Input Form */}
           <form className="chatbot-input-area" onSubmit={handleSendMessage}>
             <input
               type="text"

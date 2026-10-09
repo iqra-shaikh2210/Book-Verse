@@ -380,7 +380,30 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+.chatbot-save-btn {
+  margin-top: 6px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #633C4F;
+  background-color: transparent;
+  color: #633C4F;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
 
+.chatbot-save-btn:hover {
+  background-color: #633C4F;
+  color: #FFFDFC;
+}
+
+.chatbot-save-btn.saved {
+  background-color: #B97886;
+  border-color: #B97886;
+  color: #FFFDFC;
+}
 /* =========================
    MOBILE RESPONSIVE
 ========================= */

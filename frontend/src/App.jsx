@@ -54,7 +54,7 @@ function App() {
             }
           />
         </Routes>
-        <ChatBot />
+        <ChatBot savedBooks={savedBooks} setSavedBooks={setSavedBooks} />
       </div>
     </BrowserRouter>
   );
