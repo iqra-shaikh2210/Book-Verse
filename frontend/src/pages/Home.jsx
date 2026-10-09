@@ -1,12 +1,26 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "../styles/Home.css";
+import initialBooksData from "../data/books.json";
 
 function Home() {
   const navigate = useNavigate();
 
-  const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(true);
+ // 1. Instant 0-second load using bundled initialBooksData or browser cache
+  const [books, setBooks] = useState(() => {
+    const cached = localStorage.getItem("bookverse_cached_books");
+    if (cached) {
+      try {
+        return JSON.parse(cached);
+      } catch (err) {
+        console.error("Cache parse error:", err);
+      }
+    }
+    return initialBooksData;
+  });
+
+  // 2. Never show a loading state because books exist immediately
+  const [loading, setLoading] = useState(false);
 
   // Selected genre
   const [selectedGenre, setSelectedGenre] = useState("Romance");
@@ -19,17 +33,18 @@ function Home() {
     { name: "Fiction"},
   ];
 
-  // Get books from MongoDB
+  // 3. Silent background fetch to sync any live database updates
   useEffect(() => {
     fetch("https://book-verse-backend-7dpu.onrender.com/api/books")
       .then((response) => response.json())
       .then((data) => {
-        setBooks(data);
-        setLoading(false);
+        if (Array.isArray(data) && data.length > 0) {
+          setBooks(data);
+          localStorage.setItem("bookverse_cached_books", JSON.stringify(data));
+        }
       })
       .catch((error) => {
-        console.error("Error fetching books:", error);
-        setLoading(false);
+        console.error("Background sync error (using local snapshot):", error);
       });
   }, []);
 
