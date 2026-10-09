@@ -125,35 +125,39 @@ function ChatBot({ savedBooks = [], setSavedBooks = () => {} }) {
 
                         return (
                           <div
-                            key={book._id}
-                            className="chatbot-book-card"
-                            onClick={() => {
-                              setIsOpen(false);
-                              navigate(`/BookDetails/${book._id}`);
-                            }}
-                          >
-                            <div className="chatbot-book-cover">
-                              {book.cover ? (
-                                <img src={book.cover} alt={book.title} />
-                              ) : (
-                                <span>📖</span>
-                              )}
-                            </div>
-                            <div className="chatbot-book-details">
-                              <h4>{book.title}</h4>
-                              <p className="chatbot-book-author">{book.author}</p>
-                              <span className="chatbot-book-rating">★ {book.rating}</span>
+  key={book._id}
+  className="chatbot-book-card"
+  onClick={() => {
+    setIsOpen(false);
+    navigate(`/BookDetails/${book._id}`);
+  }}
+>
+  <div className="chatbot-book-cover">
+    {book.cover ? (
+      <img src={book.cover} alt={book.title} />
+    ) : (
+      <span>📖</span>
+    )}
+  </div>
 
-                              {/* Save to Saved Books Button */}
-                              <button
-                                type="button"
-                                className={`chatbot-save-btn ${isSaved ? "saved" : ""}`}
-                                onClick={(e) => handleToggleSave(e, book)}
-                              >
-                                {isSaved ? "✓ Saved" : "+ Save"}
-                              </button>
-                            </div>
-                          </div>
+  <div className="chatbot-book-details">
+    <h4>{book.title}</h4>
+    <p className="chatbot-book-author">{book.author}</p>
+
+    {/* Dedicated Meta Row separating Rating and Save Button */}
+    <div className="chatbot-book-meta-row">
+      <span className="chatbot-book-rating">★ {book.rating}</span>
+      <button
+        type="button"
+        className={`chatbot-save-btn ${isSaved ? "saved" : ""}`}
+        onClick={(e) => handleToggleSave(e, book)}
+      >
+        {isSaved ? "Saved" : "+ Save"}
+      </button>
+    </div>
+  </div>
+</div>
+      
                         );
                       })}
                     </div>

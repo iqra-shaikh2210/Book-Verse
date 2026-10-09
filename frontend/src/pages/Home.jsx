@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "../styles/Home.css";
-import initialBooksData from ".../backend/data/books.json";
+import initialBooksData from "../data/books.json";
 
 function Home() {
   const navigate = useNavigate();

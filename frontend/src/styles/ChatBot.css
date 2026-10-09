@@ -380,33 +380,44 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
-.chatbot-save-btn {
+/* Meta row holding Rating + Save Button separated cleanly */
+.chatbot-book-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 6px;
-  padding: 4px 10px;
-  font-size: 0.75rem;
+  gap: 8px;
+}
+
+/* macOS Minimalist Pill Save Button */
+.chatbot-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 9px;
+  font-size: 11px;
   font-weight: 600;
-  border-radius: 6px;
-  border: 1px solid #633C4F;
-  background-color: transparent;
+  border-radius: 999px;
+  border: 1px solid rgba(185, 120, 134, 0.4);
+  background-color: #FFFDFC;
   color: #633C4F;
   cursor: pointer;
-  transition: all 0.2s ease;
-  align-self: flex-start;
+  line-height: 1.2;
+  transition: all 0.15s ease;
 }
 
 .chatbot-save-btn:hover {
-  background-color: #633C4F;
-  color: #FFFDFC;
+  background-color: #F8F1ED;
+  border-color: #633C4F;
+  transform: translateY(-1px);
+}
+.chatbot-save-btn.saved {
+  background-color: #F8F1ED;
+  border-color: #B97886;
+  color: #B97886;
+  font-weight: 700;
 }
 
-.chatbot-save-btn.saved {
-  background-color: #B97886;
-  border-color: #B97886;
-  color: #FFFDFC;
-}
-/* =========================
-   MOBILE RESPONSIVE
-========================= */
 
 @media (max-width: 480px) {
   .chatbot-wrapper {
